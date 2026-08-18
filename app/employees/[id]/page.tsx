@@ -2,10 +2,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { getEmployee } from "@/lib/data/employees";
+import { listLeaveForEmployee } from "@/lib/data/leave";
 import { createClient } from "@/lib/supabase/server";
 
 import { deactivateEmployeeAction, updateEmployeeAction } from "../actions";
 import { EmployeeForm } from "../employee-form";
+import { LeaveForm } from "../leave-form";
 
 export const dynamic = "force-dynamic";
 
@@ -31,6 +33,8 @@ export default async function EmployeeDetailPage(props: PageProps<"/employees/[i
   const { data: employee, error } = await getEmployee(id);
   if (error || !employee) notFound();
 
+  const { data: leaveEntries, error: leaveError } = await listLeaveForEmployee(employee.id);
+
   const deactivate = deactivateEmployeeAction.bind(null, employee.id);
 
   return (
@@ -55,6 +59,47 @@ export default async function EmployeeDetailPage(props: PageProps<"/employees/[i
       </div>
 
       <EmployeeForm action={updateEmployeeAction} employee={employee} submitLabel="Save changes" />
+
+      <section className="flex flex-col gap-4 border-t border-zinc-200 pt-6 dark:border-zinc-800">
+        <h2 className="text-lg font-semibold">Leave &amp; attendance history</h2>
+
+        {leaveError && (
+          <p className="text-sm text-red-600 dark:text-red-400" role="alert">
+            {leaveError}
+          </p>
+        )}
+
+        {!leaveError && leaveEntries && leaveEntries.length === 0 && (
+          <p className="text-sm text-zinc-600 dark:text-zinc-400">No leave or absences logged.</p>
+        )}
+
+        {!leaveError && leaveEntries && leaveEntries.length > 0 && (
+          <table className="w-full border-collapse text-sm">
+            <thead>
+              <tr className="border-b border-zinc-200 text-left text-xs uppercase text-zinc-500 dark:border-zinc-800">
+                <th className="py-2 pr-4">Type</th>
+                <th className="py-2 pr-4">Start</th>
+                <th className="py-2 pr-4">End</th>
+                <th className="py-2 pr-4">Days</th>
+                <th className="py-2 pr-4">Note</th>
+              </tr>
+            </thead>
+            <tbody>
+              {leaveEntries.map((entry) => (
+                <tr key={entry.id} className="border-b border-zinc-100 dark:border-zinc-900">
+                  <td className="py-2 pr-4 capitalize">{entry.type}</td>
+                  <td className="py-2 pr-4">{entry.start_date}</td>
+                  <td className="py-2 pr-4">{entry.end_date ?? "—"}</td>
+                  <td className="py-2 pr-4">{entry.days ?? "—"}</td>
+                  <td className="py-2 pr-4">{entry.note ?? "—"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+
+        <LeaveForm employeeId={employee.id} />
+      </section>
     </main>
   );
 }
