@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
 
 import { createEmployeeAction } from "../actions";
@@ -16,10 +17,10 @@ export default async function NewEmployeePage() {
   if (!user) {
     return (
       <main className="flex flex-1 flex-col items-center justify-center gap-3 p-8">
-        <p className="text-sm text-zinc-600 dark:text-zinc-400">You need to sign in to add employees.</p>
-        <Link href="/login" className="text-sm font-medium underline">
+        <p className="text-sm text-muted-foreground">You need to sign in to add employees.</p>
+        <Button variant="link" render={<Link href="/login" />}>
           Go to sign in
-        </Link>
+        </Button>
       </main>
     );
   }

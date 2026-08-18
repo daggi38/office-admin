@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { Button } from "@/components/ui/button";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { getEmployee } from "@/lib/data/employees";
 import { listLeaveForEmployee } from "@/lib/data/leave";
 import { createClient } from "@/lib/supabase/server";
@@ -22,10 +24,10 @@ export default async function EmployeeDetailPage(props: PageProps<"/employees/[i
   if (!user) {
     return (
       <main className="flex flex-1 flex-col items-center justify-center gap-3 p-8">
-        <p className="text-sm text-zinc-600 dark:text-zinc-400">You need to sign in to view this record.</p>
-        <Link href="/login" className="text-sm font-medium underline">
+        <p className="text-sm text-muted-foreground">You need to sign in to view this record.</p>
+        <Button variant="link" render={<Link href="/login" />}>
           Go to sign in
-        </Link>
+        </Button>
       </main>
     );
   }
@@ -41,61 +43,58 @@ export default async function EmployeeDetailPage(props: PageProps<"/employees/[i
     <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 p-8">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Link href="/employees" className="text-sm underline">
+          <Link href="/employees" className="text-sm text-muted-foreground underline">
             ← Employees
           </Link>
           <h1 className="text-xl font-semibold">{employee.name}</h1>
         </div>
         {employee.employment_status === "active" && (
           <form action={deactivate}>
-            <button
-              type="submit"
-              className="rounded border border-red-300 px-3 py-1.5 text-sm font-medium text-red-700 dark:border-red-900 dark:text-red-400"
-            >
+            <Button type="submit" variant="destructive">
               Deactivate
-            </button>
+            </Button>
           </form>
         )}
       </div>
 
       <EmployeeForm action={updateEmployeeAction} employee={employee} submitLabel="Save changes" />
 
-      <section className="flex flex-col gap-4 border-t border-zinc-200 pt-6 dark:border-zinc-800">
+      <section className="flex flex-col gap-4 border-t border-border pt-6">
         <h2 className="text-lg font-semibold">Leave &amp; attendance history</h2>
 
         {leaveError && (
-          <p className="text-sm text-red-600 dark:text-red-400" role="alert">
+          <p className="text-sm text-destructive" role="alert">
             {leaveError}
           </p>
         )}
 
         {!leaveError && leaveEntries && leaveEntries.length === 0 && (
-          <p className="text-sm text-zinc-600 dark:text-zinc-400">No leave or absences logged.</p>
+          <p className="text-sm text-muted-foreground">No leave or absences logged.</p>
         )}
 
         {!leaveError && leaveEntries && leaveEntries.length > 0 && (
-          <table className="w-full border-collapse text-sm">
-            <thead>
-              <tr className="border-b border-zinc-200 text-left text-xs uppercase text-zinc-500 dark:border-zinc-800">
-                <th className="py-2 pr-4">Type</th>
-                <th className="py-2 pr-4">Start</th>
-                <th className="py-2 pr-4">End</th>
-                <th className="py-2 pr-4">Days</th>
-                <th className="py-2 pr-4">Note</th>
-              </tr>
-            </thead>
-            <tbody>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Type</TableHead>
+                <TableHead>Start</TableHead>
+                <TableHead>End</TableHead>
+                <TableHead>Days</TableHead>
+                <TableHead>Note</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {leaveEntries.map((entry) => (
-                <tr key={entry.id} className="border-b border-zinc-100 dark:border-zinc-900">
-                  <td className="py-2 pr-4 capitalize">{entry.type}</td>
-                  <td className="py-2 pr-4">{entry.start_date}</td>
-                  <td className="py-2 pr-4">{entry.end_date ?? "—"}</td>
-                  <td className="py-2 pr-4">{entry.days ?? "—"}</td>
-                  <td className="py-2 pr-4">{entry.note ?? "—"}</td>
-                </tr>
+                <TableRow key={entry.id}>
+                  <TableCell className="capitalize">{entry.type}</TableCell>
+                  <TableCell>{entry.start_date}</TableCell>
+                  <TableCell>{entry.end_date ?? "—"}</TableCell>
+                  <TableCell>{entry.days ?? "—"}</TableCell>
+                  <TableCell>{entry.note ?? "—"}</TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         )}
 
         <LeaveForm employeeId={employee.id} />

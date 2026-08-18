@@ -1,5 +1,18 @@
 import Link from "next/link";
 
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { listEmployees } from "@/lib/data/employees";
 import { createClient } from "@/lib/supabase/server";
 import type { EmploymentStatus } from "@/lib/supabase/types";
@@ -24,12 +37,10 @@ export default async function EmployeesPage(props: PageProps<"/employees">) {
   if (!user) {
     return (
       <main className="flex flex-1 flex-col items-center justify-center gap-3 p-8">
-        <p className="text-sm text-zinc-600 dark:text-zinc-400">
-          You need to sign in to view employee records.
-        </p>
-        <Link href="/login" className="text-sm font-medium underline">
+        <p className="text-sm text-muted-foreground">You need to sign in to view employee records.</p>
+        <Button variant="link" render={<Link href="/login" />}>
           Go to sign in
-        </Link>
+        </Button>
       </main>
     );
   }
@@ -40,96 +51,77 @@ export default async function EmployeesPage(props: PageProps<"/employees">) {
     <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 p-8">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-semibold">Employees</h1>
-        <Link
-          href="/employees/new"
-          className="rounded bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white dark:bg-zinc-50 dark:text-zinc-900"
-        >
-          Add employee
-        </Link>
+        <Button render={<Link href="/employees/new" />}>Add employee</Button>
       </div>
 
       <form method="GET" className="flex flex-wrap items-end gap-3">
-        <div className="flex flex-col gap-1">
-          <label htmlFor="q" className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="q" className="text-xs text-muted-foreground">
             Search name or role
-          </label>
-          <input
-            id="q"
-            name="q"
-            defaultValue={search ?? ""}
-            className="rounded border border-zinc-300 px-3 py-1.5 text-sm dark:border-zinc-700 dark:bg-zinc-900"
-          />
+          </Label>
+          <Input id="q" name="q" defaultValue={search ?? ""} />
         </div>
-        <div className="flex flex-col gap-1">
-          <label htmlFor="status" className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="status" className="text-xs text-muted-foreground">
             Status
-          </label>
-          <select
-            id="status"
-            name="status"
-            defaultValue={status ?? ""}
-            className="rounded border border-zinc-300 px-3 py-1.5 text-sm dark:border-zinc-700 dark:bg-zinc-900"
-          >
-            <option value="">All</option>
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-          </select>
+          </Label>
+          <Select name="status" defaultValue={status ?? "all"}>
+            <SelectTrigger id="status">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All</SelectItem>
+              <SelectItem value="active">Active</SelectItem>
+              <SelectItem value="inactive">Inactive</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
-        <button
-          type="submit"
-          className="rounded border border-zinc-300 px-3 py-1.5 text-sm font-medium dark:border-zinc-700"
-        >
+        <Button type="submit" variant="outline">
           Filter
-        </button>
+        </Button>
       </form>
 
       {error && (
-        <p className="text-sm text-red-600 dark:text-red-400" role="alert">
+        <p className="text-sm text-destructive" role="alert">
           {error}
         </p>
       )}
 
       {!error && employees && employees.length === 0 && (
-        <p className="text-sm text-zinc-600 dark:text-zinc-400">No employees found.</p>
+        <p className="text-sm text-muted-foreground">No employees found.</p>
       )}
 
       {!error && employees && employees.length > 0 && (
-        <table className="w-full border-collapse text-sm">
-          <thead>
-            <tr className="border-b border-zinc-200 text-left text-xs uppercase text-zinc-500 dark:border-zinc-800">
-              <th className="py-2 pr-4">Name</th>
-              <th className="py-2 pr-4">Role</th>
-              <th className="py-2 pr-4">Start date</th>
-              <th className="py-2 pr-4">Status</th>
-              <th className="py-2 pr-4">Salary</th>
-            </tr>
-          </thead>
-          <tbody>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead>Role</TableHead>
+              <TableHead>Start date</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Salary</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {employees.map((employee) => (
-              <tr key={employee.id} className="border-b border-zinc-100 dark:border-zinc-900">
-                <td className="py-2 pr-4">
+              <TableRow key={employee.id}>
+                <TableCell>
                   <Link href={`/employees/${employee.id}`} className="underline">
                     {employee.name}
                   </Link>
-                </td>
-                <td className="py-2 pr-4">{employee.role}</td>
-                <td className="py-2 pr-4">{employee.start_date}</td>
-                <td className="py-2 pr-4">
-                  <span
-                    className={
-                      employee.employment_status === "active"
-                        ? "rounded bg-green-100 px-2 py-0.5 text-xs text-green-800 dark:bg-green-900/40 dark:text-green-300"
-                        : "rounded bg-zinc-200 px-2 py-0.5 text-xs text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300"
-                    }
-                  >
+                </TableCell>
+                <TableCell>{employee.role}</TableCell>
+                <TableCell>{employee.start_date}</TableCell>
+                <TableCell>
+                  <Badge variant={employee.employment_status === "active" ? "default" : "secondary"}>
                     {employee.employment_status}
-                  </span>
-                </td>
-                <td className="py-2 pr-4">{employee.salary ?? "—"}</td>
-              </tr>
+                  </Badge>
+                </TableCell>
+                <TableCell>{employee.salary ?? "—"}</TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       )}
     </main>
   );

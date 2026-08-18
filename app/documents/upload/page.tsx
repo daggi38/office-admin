@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { Button } from "@/components/ui/button";
 import { listCategories } from "@/lib/data/categories";
 import { createClient } from "@/lib/supabase/server";
 
@@ -16,10 +17,10 @@ export default async function UploadDocumentPage() {
   if (!user) {
     return (
       <main className="flex flex-1 flex-col items-center justify-center gap-3 p-8">
-        <p className="text-sm text-zinc-600 dark:text-zinc-400">You need to sign in to upload documents.</p>
-        <Link href="/login" className="text-sm font-medium underline">
+        <p className="text-sm text-muted-foreground">You need to sign in to upload documents.</p>
+        <Button variant="link" render={<Link href="/login" />}>
           Go to sign in
-        </Link>
+        </Button>
       </main>
     );
   }
@@ -30,7 +31,7 @@ export default async function UploadDocumentPage() {
     <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 p-8">
       <h1 className="text-xl font-semibold">Upload document</h1>
       {error && (
-        <p className="text-sm text-red-600 dark:text-red-400" role="alert">
+        <p className="text-sm text-destructive" role="alert">
           {error}
         </p>
       )}
