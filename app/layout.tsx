@@ -36,6 +36,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         <header className="flex items-center justify-between border-b border-zinc-200 px-6 py-3 dark:border-zinc-800">
           <nav className="flex items-center gap-4 text-sm font-medium">
             <Link href="/employees">Employees</Link>
+            <Link href="/documents">Documents</Link>
           </nav>
           {user ? (
             <form action={signOut} className="flex items-center gap-3 text-sm text-zinc-600 dark:text-zinc-400">
