@@ -37,6 +37,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
           <nav className="flex items-center gap-4 text-sm font-medium">
             <Link href="/employees">Employees</Link>
             <Link href="/documents">Documents</Link>
+            <Link href="/facilities">Facilities</Link>
           </nav>
           {user ? (
             <form action={signOut} className="flex items-center gap-3 text-sm text-zinc-600 dark:text-zinc-400">
