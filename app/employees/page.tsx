@@ -40,6 +40,12 @@ export default async function EmployeesPage(props: PageProps<"/employees">) {
     <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 p-8">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-semibold">Employees</h1>
+        <Link
+          href="/employees/new"
+          className="rounded bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white dark:bg-zinc-50 dark:text-zinc-900"
+        >
+          Add employee
+        </Link>
       </div>
 
       <form method="GET" className="flex flex-wrap items-end gap-3">
@@ -101,7 +107,11 @@ export default async function EmployeesPage(props: PageProps<"/employees">) {
           <tbody>
             {employees.map((employee) => (
               <tr key={employee.id} className="border-b border-zinc-100 dark:border-zinc-900">
-                <td className="py-2 pr-4">{employee.name}</td>
+                <td className="py-2 pr-4">
+                  <Link href={`/employees/${employee.id}`} className="underline">
+                    {employee.name}
+                  </Link>
+                </td>
                 <td className="py-2 pr-4">{employee.role}</td>
                 <td className="py-2 pr-4">{employee.start_date}</td>
                 <td className="py-2 pr-4">
