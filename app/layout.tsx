@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import Link from "next/link";
 import { ThemeProvider } from "next-themes";
+import { cookies } from "next/headers";
 import "./globals.css";
 
-import { signOut } from "@/app/login/actions";
-import { Button } from "@/components/ui/button";
+import { AppSidebar } from "@/components/app-sidebar";
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { createClient } from "@/lib/supabase/server";
 
 const geistSans = Geist({
@@ -29,40 +30,28 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  const cookieStore = await cookies();
+  const sidebarOpen = cookieStore.get("sidebar_state")?.value !== "false";
+
   return (
     <html
       lang="en"
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <header className="flex items-center justify-between border-b border-border px-6 py-3">
-            <nav className="flex items-center gap-4 text-sm font-medium">
-              <Link href="/employees" className="text-muted-foreground transition-colors hover:text-foreground">
-                Employees
-              </Link>
-              <Link href="/documents" className="text-muted-foreground transition-colors hover:text-foreground">
-                Documents
-              </Link>
-              <Link href="/facilities" className="text-muted-foreground transition-colors hover:text-foreground">
-                Facilities
-              </Link>
-            </nav>
-            {user ? (
-              <form action={signOut} className="flex items-center gap-3">
-                <span className="text-sm text-muted-foreground">{user.email}</span>
-                <Button type="submit" variant="ghost" size="sm">
-                  Sign out
-                </Button>
-              </form>
-            ) : (
-              <Button variant="link" size="sm" render={<Link href="/login" />}>
-                Sign in
-              </Button>
-            )}
-          </header>
-          <div className="flex flex-1 flex-col">{children}</div>
+          <TooltipProvider>
+            <SidebarProvider defaultOpen={sidebarOpen}>
+              <AppSidebar userEmail={user?.email ?? null} />
+              <SidebarInset>
+                <header className="flex items-center gap-2 border-b border-border px-4 py-3">
+                  <SidebarTrigger />
+                </header>
+                <div className="flex flex-1 flex-col">{children}</div>
+              </SidebarInset>
+            </SidebarProvider>
+          </TooltipProvider>
         </ThemeProvider>
       </body>
     </html>
