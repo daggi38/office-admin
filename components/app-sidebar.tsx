@@ -1,6 +1,6 @@
 "use client";
 
-import { Building2, FileText, Users } from "lucide-react";
+import { Briefcase, Building2, FileText, LogOut, Users } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -12,10 +12,12 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarSeparator,
 } from "@/components/ui/sidebar";
 
 const navItems = [
@@ -26,16 +28,29 @@ const navItems = [
 
 export function AppSidebar({ userEmail }: { userEmail: string | null }) {
   const pathname = usePathname();
+  const initial = userEmail?.trim().charAt(0).toUpperCase() ?? "?";
 
   return (
-    <Sidebar collapsible="icon">
-      <SidebarHeader>
-        <div className="px-2 py-1 text-sm font-semibold">Office Admin</div>
+    <Sidebar collapsible="icon" variant="inset">
+      <SidebarHeader className="gap-3 px-3 py-4">
+        <div className="flex items-center gap-2.5">
+          <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+            <Briefcase className="size-4" />
+          </div>
+          <div className="flex flex-col leading-tight group-data-[collapsible=icon]:hidden">
+            <span className="text-sm font-semibold">Office Admin</span>
+            <span className="text-xs text-muted-foreground">Administration Platform</span>
+          </div>
+        </div>
       </SidebarHeader>
-      <SidebarContent>
+
+      <SidebarSeparator />
+
+      <SidebarContent className="px-1 py-3">
         <SidebarGroup>
+          <SidebarGroupLabel>Menu</SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu className="gap-1">
               {navItems.map((item) => {
                 const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
                 return (
@@ -51,15 +66,25 @@ export function AppSidebar({ userEmail }: { userEmail: string | null }) {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
-        <form action={signOut} className="flex flex-col gap-2 px-2 py-1">
-          {userEmail && (
-            <span className="truncate text-xs text-muted-foreground group-data-[collapsible=icon]:hidden">
-              {userEmail}
-            </span>
-          )}
-          <Button type="submit" variant="outline" size="sm" className="group-data-[collapsible=icon]:hidden">
-            Sign out
+
+      <SidebarSeparator />
+
+      <SidebarFooter className="px-3 py-3">
+        <form action={signOut} className="flex items-center gap-2.5">
+          <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-medium">
+            {initial}
+          </div>
+          <div className="flex min-w-0 flex-1 flex-col leading-tight group-data-[collapsible=icon]:hidden">
+            <span className="truncate text-xs font-medium">{userEmail ?? "Signed in"}</span>
+          </div>
+          <Button
+            type="submit"
+            variant="ghost"
+            size="icon-sm"
+            className="shrink-0 text-muted-foreground group-data-[collapsible=icon]:hidden"
+            aria-label="Sign out"
+          >
+            <LogOut />
           </Button>
         </form>
       </SidebarFooter>

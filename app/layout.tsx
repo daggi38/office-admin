@@ -46,7 +46,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
               <SidebarProvider defaultOpen={sidebarOpen}>
                 <AppSidebar userEmail={user.email ?? null} />
                 <SidebarInset>
-                  <header className="flex items-center gap-2 border-b border-border px-4 py-3">
+                  <header className="sticky top-0 z-10 flex items-center gap-2 border-b border-border bg-background/80 px-6 py-4 backdrop-blur">
                     <SidebarTrigger />
                   </header>
                   <div className="flex flex-1 flex-col">{children}</div>
