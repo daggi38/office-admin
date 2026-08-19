@@ -5,11 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { getEmployee } from "@/lib/data/employees";
 import { listLeaveForEmployee } from "@/lib/data/leave";
+import { listTrainingForEmployee } from "@/lib/data/training";
 import { createClient } from "@/lib/supabase/server";
 
 import { deactivateEmployeeAction, updateEmployeeAction } from "../actions";
 import { EmployeeForm } from "../employee-form";
 import { LeaveForm } from "../leave-form";
+import { TrainingForm } from "../training-form";
 
 export const dynamic = "force-dynamic";
 
@@ -36,6 +38,7 @@ export default async function EmployeeDetailPage(props: PageProps<"/employees/[i
   if (error || !employee) notFound();
 
   const { data: leaveEntries, error: leaveError } = await listLeaveForEmployee(employee.id);
+  const { data: trainingRecords, error: trainingError } = await listTrainingForEmployee(employee.id);
 
   const deactivate = deactivateEmployeeAction.bind(null, employee.id);
 
@@ -98,6 +101,43 @@ export default async function EmployeeDetailPage(props: PageProps<"/employees/[i
         )}
 
         <LeaveForm employeeId={employee.id} />
+      </section>
+
+      <section className="flex flex-col gap-4 border-t border-border pt-6">
+        <h2 className="text-lg font-semibold tracking-tight">Training &amp; certification records</h2>
+
+        {trainingError && (
+          <p className="text-sm text-destructive" role="alert">
+            {trainingError}
+          </p>
+        )}
+
+        {!trainingError && trainingRecords && trainingRecords.length === 0 && (
+          <p className="text-sm text-muted-foreground">No training records logged.</p>
+        )}
+
+        {!trainingError && trainingRecords && trainingRecords.length > 0 && (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Training</TableHead>
+                <TableHead>Completed</TableHead>
+                <TableHead>Expires</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {trainingRecords.map((record) => (
+                <TableRow key={record.id}>
+                  <TableCell>{record.training_name}</TableCell>
+                  <TableCell>{record.completed_date ?? "—"}</TableCell>
+                  <TableCell>{record.expiration_date ?? "—"}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
+
+        <TrainingForm employeeId={employee.id} />
       </section>
     </main>
   );

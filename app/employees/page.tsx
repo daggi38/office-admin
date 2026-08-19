@@ -97,6 +97,7 @@ export default async function EmployeesPage(props: PageProps<"/employees">) {
             <TableRow>
               <TableHead>Name</TableHead>
               <TableHead>Role</TableHead>
+              <TableHead>Department</TableHead>
               <TableHead>Start date</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Salary</TableHead>
@@ -111,6 +112,7 @@ export default async function EmployeesPage(props: PageProps<"/employees">) {
                   </Link>
                 </TableCell>
                 <TableCell>{employee.role}</TableCell>
+                <TableCell>{employee.department ?? "—"}</TableCell>
                 <TableCell>{employee.start_date}</TableCell>
                 <TableCell>
                   <Badge variant={employee.employment_status === "active" ? "default" : "secondary"}>
