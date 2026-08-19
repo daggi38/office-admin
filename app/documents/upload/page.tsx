@@ -29,7 +29,7 @@ export default async function UploadDocumentPage() {
 
   return (
     <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 p-8">
-      <h1 className="text-xl font-semibold">Upload document</h1>
+      <h1 className="text-2xl font-semibold tracking-tight">Upload document</h1>
       {error && (
         <p className="text-sm text-destructive" role="alert">
           {error}

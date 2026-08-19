@@ -27,7 +27,7 @@ export default async function NewEmployeePage() {
 
   return (
     <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 p-8">
-      <h1 className="text-xl font-semibold">Add employee</h1>
+      <h1 className="text-2xl font-semibold tracking-tight">Add employee</h1>
       <EmployeeForm action={createEmployeeAction} submitLabel="Create employee" />
     </main>
   );

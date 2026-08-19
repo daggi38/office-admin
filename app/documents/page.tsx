@@ -55,7 +55,7 @@ export default async function DocumentsPage(props: PageProps<"/documents">) {
   return (
     <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 p-8">
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold">Documents</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Documents</h1>
         <Button render={<Link href="/documents/upload" />}>Upload</Button>
       </div>
 

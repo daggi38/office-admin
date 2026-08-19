@@ -46,7 +46,7 @@ export default async function EmployeeDetailPage(props: PageProps<"/employees/[i
           <Link href="/employees" className="text-sm text-muted-foreground underline">
             ← Employees
           </Link>
-          <h1 className="text-xl font-semibold">{employee.name}</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">{employee.name}</h1>
         </div>
         {employee.employment_status === "active" && (
           <form action={deactivate}>
@@ -60,7 +60,7 @@ export default async function EmployeeDetailPage(props: PageProps<"/employees/[i
       <EmployeeForm action={updateEmployeeAction} employee={employee} submitLabel="Save changes" />
 
       <section className="flex flex-col gap-4 border-t border-border pt-6">
-        <h2 className="text-lg font-semibold">Leave &amp; attendance history</h2>
+        <h2 className="text-lg font-semibold tracking-tight">Leave &amp; attendance history</h2>
 
         {leaveError && (
           <p className="text-sm text-destructive" role="alert">

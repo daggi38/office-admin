@@ -31,7 +31,7 @@ export default async function FacilitiesPage() {
   return (
     <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 p-8">
       <div>
-        <h1 className="text-xl font-semibold">Facilities</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Facilities</h1>
         <p className="text-sm text-muted-foreground">Resource schedule — view only, no booking requests.</p>
       </div>
 
@@ -69,7 +69,7 @@ export default async function FacilitiesPage() {
       )}
 
       <section className="flex flex-col gap-4 border-t border-border pt-6">
-        <h2 className="text-lg font-semibold">Add / update entry</h2>
+        <h2 className="text-lg font-semibold tracking-tight">Add / update entry</h2>
         <ScheduleForm />
       </section>
     </main>
