@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { LoginForm } from "./login-form";
 
@@ -8,6 +8,7 @@ export default function LoginPage() {
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle className="text-xl">Sign in</CardTitle>
+          <CardDescription>Use the shared office account to access the admin platform.</CardDescription>
         </CardHeader>
         <CardContent>
           <LoginForm />

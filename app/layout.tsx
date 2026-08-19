@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { ThemeProvider } from "next-themes";
 import { cookies } from "next/headers";
 import "./globals.css";
 
@@ -34,29 +33,23 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   const sidebarOpen = cookieStore.get("sidebar_state")?.value !== "false";
 
   return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="min-h-full">
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <TooltipProvider>
-            {user ? (
-              <SidebarProvider defaultOpen={sidebarOpen}>
-                <AppSidebar userEmail={user.email ?? null} />
-                <SidebarInset>
-                  <header className="sticky top-0 z-10 flex items-center gap-2 border-b border-border bg-background/80 px-6 py-4 backdrop-blur">
-                    <SidebarTrigger />
-                  </header>
-                  <div className="flex flex-1 flex-col">{children}</div>
-                </SidebarInset>
-              </SidebarProvider>
-            ) : (
-              <div className="flex min-h-svh flex-1 flex-col">{children}</div>
-            )}
-          </TooltipProvider>
-        </ThemeProvider>
+        <TooltipProvider>
+          {user ? (
+            <SidebarProvider defaultOpen={sidebarOpen}>
+              <AppSidebar userEmail={user.email ?? null} />
+              <SidebarInset>
+                <header className="sticky top-0 z-10 flex items-center gap-2 border-b border-border bg-background/80 px-6 py-4 backdrop-blur">
+                  <SidebarTrigger />
+                </header>
+                <div className="flex flex-1 flex-col">{children}</div>
+              </SidebarInset>
+            </SidebarProvider>
+          ) : (
+            <div className="flex min-h-svh flex-1 flex-col">{children}</div>
+          )}
+        </TooltipProvider>
       </body>
     </html>
   );
