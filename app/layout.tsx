@@ -42,15 +42,19 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <TooltipProvider>
-            <SidebarProvider defaultOpen={sidebarOpen}>
-              <AppSidebar userEmail={user?.email ?? null} />
-              <SidebarInset>
-                <header className="flex items-center gap-2 border-b border-border px-4 py-3">
-                  <SidebarTrigger />
-                </header>
-                <div className="flex flex-1 flex-col">{children}</div>
-              </SidebarInset>
-            </SidebarProvider>
+            {user ? (
+              <SidebarProvider defaultOpen={sidebarOpen}>
+                <AppSidebar userEmail={user.email ?? null} />
+                <SidebarInset>
+                  <header className="flex items-center gap-2 border-b border-border px-4 py-3">
+                    <SidebarTrigger />
+                  </header>
+                  <div className="flex flex-1 flex-col">{children}</div>
+                </SidebarInset>
+              </SidebarProvider>
+            ) : (
+              <div className="flex min-h-svh flex-1 flex-col">{children}</div>
+            )}
           </TooltipProvider>
         </ThemeProvider>
       </body>

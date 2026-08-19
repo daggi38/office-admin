@@ -52,20 +52,16 @@ export function AppSidebar({ userEmail }: { userEmail: string | null }) {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        {userEmail ? (
-          <form action={signOut} className="flex flex-col gap-2 px-2 py-1">
+        <form action={signOut} className="flex flex-col gap-2 px-2 py-1">
+          {userEmail && (
             <span className="truncate text-xs text-muted-foreground group-data-[collapsible=icon]:hidden">
               {userEmail}
             </span>
-            <Button type="submit" variant="outline" size="sm" className="group-data-[collapsible=icon]:hidden">
-              Sign out
-            </Button>
-          </form>
-        ) : (
-          <Button variant="outline" size="sm" className="mx-2 group-data-[collapsible=icon]:hidden" render={<Link href="/login" />}>
-            Sign in
+          )}
+          <Button type="submit" variant="outline" size="sm" className="group-data-[collapsible=icon]:hidden">
+            Sign out
           </Button>
-        )}
+        </form>
       </SidebarFooter>
     </Sidebar>
   );
