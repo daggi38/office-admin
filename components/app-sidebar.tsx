@@ -37,10 +37,7 @@ export function AppSidebar({ userEmail }: { userEmail: string | null }) {
           <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
             <Briefcase className="size-4" />
           </div>
-          <div className="flex flex-col leading-tight group-data-[collapsible=icon]:hidden">
-            <span className="text-sm font-semibold">Office Admin</span>
-            <span className="text-xs text-muted-foreground">Administration Platform</span>
-          </div>
+          <span className="text-sm font-semibold group-data-[collapsible=icon]:hidden">Office Admin</span>
         </div>
       </SidebarHeader>
 

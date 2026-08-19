@@ -52,7 +52,6 @@ export function EmployeeForm({
           inputMode="decimal"
           defaultValue={employee?.salary ?? ""}
         />
-        <p className="text-xs text-muted-foreground">Entered manually — never calculated.</p>
       </div>
 
       {employee && (

@@ -31,11 +31,8 @@ export default async function FacilitiesPage() {
   return (
     <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 p-8">
       <div>
-        <h1 className="text-xl font-semibold">Facilities — resource schedule</h1>
-        <p className="text-sm text-muted-foreground">
-          Reference schedule for shared supplies and resources. Documentation only — there is no
-          request or booking workflow here.
-        </p>
+        <h1 className="text-xl font-semibold">Facilities</h1>
+        <p className="text-sm text-muted-foreground">Resource schedule — view only, no booking requests.</p>
       </div>
 
       {error && (
