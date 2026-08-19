@@ -2,9 +2,12 @@
 
 These steps aren't scriptable from here (need dashboard/CLI login) — do them once per Supabase project.
 
-## 1. Apply the migration
+## 1. Apply the migrations
 
-Run `supabase/migrations/20260817000000_office_admin_init.sql` against the project (SQL Editor, or `supabase db push` if the project is linked via CLI). It creates all 5 tables, RLS policies, and seeds `document_categories`.
+Run these against the project, in order (SQL Editor, or `supabase db push` if the project is linked via CLI):
+
+1. `supabase/migrations/20260817000000_office_admin_init.sql` — creates all 5 base tables, RLS policies, and seeds `document_categories`.
+2. `supabase/migrations/20260819000000_employee_master_data.sql` — expands `employees` with the fuller identity/payroll/lifecycle field set and adds `employee_training_records`.
 
 ## 2. Create the shared auth user
 
